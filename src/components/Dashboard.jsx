@@ -1,19 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
+import { BLACK, BLUE, OLIVE, ORANGE, MINT, RED, withAlpha, CONFETTI_COLORS } from "../lib/colors";
 
 const fmt = (n) => n.toLocaleString("ja-JP", { maximumFractionDigits: 0 });
 const fmtU = (n) =>
   "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2 });
-
-const CONFETTI_COLORS = [
-  "#fbbf24",
-  "#f87171",
-  "#6366f1",
-  "#34d399",
-  "#60a5fa",
-  "#f472b6",
-  "#a78bfa",
-  "#fb923c",
-];
 
 const confettiKeyframes = `
 @keyframes confetti-fall {
@@ -93,14 +83,14 @@ const styles = {
     marginBottom: 28,
   },
   summaryCard: (accentColor) => ({
-    background: "rgba(15,23,42,0.6)",
+    background: withAlpha(BLACK, 0.6),
     borderRadius: 12,
     padding: "18px 16px",
     borderLeft: `3px solid ${accentColor}`,
   }),
   summaryLabel: {
     fontSize: 11,
-    color: "#94a3b8",
+    color: OLIVE,
     fontFamily: "'IBM Plex Sans', sans-serif",
     textTransform: "uppercase",
     letterSpacing: "0.05em",
@@ -115,7 +105,7 @@ const styles = {
   sectionTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Sans', sans-serif",
     marginBottom: 12,
     display: "flex",
@@ -128,14 +118,14 @@ const styles = {
     padding: "3px 8px",
     borderRadius: 4,
     background: color,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Sans', sans-serif",
     textTransform: "uppercase",
     letterSpacing: "0.04em",
   }),
   divider: {
     height: 1,
-    background: "#1e293b",
+    background: withAlpha(OLIVE, 0.3),
     margin: "24px 0",
   },
   tableWrap: {
@@ -151,9 +141,9 @@ const styles = {
   th: {
     padding: "8px 6px",
     textAlign: "right",
-    color: "#94a3b8",
+    color: OLIVE,
     fontWeight: 500,
-    borderBottom: "1px solid #1e293b",
+    borderBottom: `1px solid ${withAlpha(OLIVE, 0.3)}`,
     fontSize: 10,
     textTransform: "uppercase",
     letterSpacing: "0.04em",
@@ -165,8 +155,8 @@ const styles = {
   },
   td: {
     padding: "8px 6px",
-    color: "#e2e8f0",
-    borderBottom: "1px solid rgba(30,41,59,0.5)",
+    color: MINT,
+    borderBottom: `1px solid ${withAlpha(OLIVE, 0.2)}`,
     textAlign: "right",
     whiteSpace: "nowrap",
   },
@@ -174,25 +164,25 @@ const styles = {
     textAlign: "left",
   },
   adjustedDate: {
-    color: "#fcd34d",
+    color: ORANGE,
     fontSize: 11,
   },
   overriddenDate: {
-    color: "#93c5fd",
+    color: BLUE,
     fontSize: 11,
   },
   notes: {
-    background: "rgba(30,45,61,0.3)",
+    background: withAlpha(OLIVE, 0.15),
     borderRadius: 10,
     padding: "16px 18px",
     fontSize: 12,
-    color: "#94a3b8",
+    color: OLIVE,
     lineHeight: 1.8,
     fontFamily: "'IBM Plex Sans', sans-serif",
   },
   emptyState: {
     textAlign: "center",
-    color: "#64748b",
+    color: OLIVE,
     padding: "48px 0",
     fontFamily: "'IBM Plex Sans', sans-serif",
     fontSize: 14,
@@ -213,14 +203,14 @@ export default function Dashboard({
   }
 
   const summaryCards = [
-    { label: "給与所得算入額", value: totals.kyuyo, color: "#fbbf24" },
-    { label: "譲渡収入合計", value: totals.sell, color: "#60a5fa" },
-    { label: "取得費合計", value: totals.cost, color: "#94a3b8" },
-    { label: "Disbursement Fee", value: totals.wire, color: "#94a3b8" },
+    { label: "給与所得算入額", value: totals.kyuyo, color: ORANGE },
+    { label: "譲渡収入合計", value: totals.sell, color: BLUE },
+    { label: "取得費合計", value: totals.cost, color: OLIVE },
+    { label: "Disbursement Fee", value: totals.wire, color: OLIVE },
     {
       label: "株式譲渡損益",
       value: totals.jotoPL,
-      color: totals.jotoPL < 0 ? "#f87171" : "#34d399",
+      color: totals.jotoPL < 0 ? RED : MINT,
     },
   ];
 
@@ -240,7 +230,7 @@ export default function Dashboard({
 
       {/* Vest（給与所得）テーブル */}
       <div style={styles.sectionTitle}>
-        <span style={styles.sectionBadge("rgba(251,191,36,0.25)")}>
+        <span style={styles.sectionBadge(withAlpha(ORANGE, 0.25))}>
           給与所得
         </span>
         Vest 明細
@@ -303,7 +293,7 @@ export default function Dashboard({
 
       {/* Trade（売却）テーブル */}
       <div style={styles.sectionTitle}>
-        <span style={styles.sectionBadge("rgba(96,165,250,0.25)")}>
+        <span style={styles.sectionBadge(withAlpha(BLUE, 0.25))}>
           譲渡所得
         </span>
         売却 明細
@@ -340,7 +330,7 @@ export default function Dashboard({
                   style={{
                     ...styles.td,
                     ...styles.tdLeft,
-                    color: "#64748b",
+                    color: OLIVE,
                     padding: "16px 6px",
                   }}
                 >

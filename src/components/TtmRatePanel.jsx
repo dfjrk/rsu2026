@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { lookupTTM } from "../lib/ttmLoader";
+import { BLACK, BLUE, OLIVE, ORANGE, MINT, withAlpha } from "../lib/colors";
 
 const DAY_NAMES = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -22,16 +23,16 @@ const styles = {
   },
   sourceNote: {
     fontSize: 12,
-    color: "#94a3b8",
+    color: OLIVE,
     marginBottom: 20,
     padding: "10px 14px",
-    background: "rgba(30,45,61,0.4)",
+    background: withAlpha(OLIVE, 0.15),
     borderRadius: 8,
     fontFamily: "'IBM Plex Sans', sans-serif",
     lineHeight: 1.6,
   },
   card: (borderColor) => ({
-    background: "rgba(15,23,42,0.6)",
+    background: withAlpha(BLACK, 0.6),
     border: `1px solid ${borderColor}`,
     borderRadius: 12,
     padding: 16,
@@ -49,27 +50,27 @@ const styles = {
     padding: "3px 8px",
     borderRadius: 4,
     background: bg,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Sans', sans-serif",
     textTransform: "uppercase",
     letterSpacing: "0.04em",
   }),
   dateLabel: {
     fontSize: 13,
-    color: "#94a3b8",
+    color: OLIVE,
     fontFamily: "'IBM Plex Sans', sans-serif",
     marginBottom: 4,
   },
   adjustReason: {
     fontSize: 11,
-    color: "#fbbf24",
+    color: ORANGE,
     fontFamily: "'IBM Plex Sans', sans-serif",
     marginBottom: 8,
   },
   rateDisplay: {
     fontSize: 28,
     fontWeight: 700,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Mono', monospace",
     marginBottom: 10,
   },
@@ -80,15 +81,15 @@ const styles = {
   },
   overrideLabel: {
     fontSize: 12,
-    color: "#64748b",
+    color: withAlpha(OLIVE, 0.7),
     fontFamily: "'IBM Plex Sans', sans-serif",
   },
   overrideInput: {
     width: 100,
-    background: "rgba(30,45,61,0.6)",
-    border: "1px solid #334155",
+    background: withAlpha(OLIVE, 0.15),
+    border: `1px solid ${withAlpha(OLIVE, 0.3)}`,
     borderRadius: 6,
-    color: "#e2e8f0",
+    color: MINT,
     padding: "5px 8px",
     fontSize: 13,
     fontFamily: "'IBM Plex Mono', monospace",
@@ -152,7 +153,7 @@ export default function TtmRatePanel({
       <div
         style={{
           textAlign: "center",
-          color: "#64748b",
+          color: OLIVE,
           padding: "48px 0",
           fontFamily: "'IBM Plex Sans', sans-serif",
           fontSize: 14,
@@ -177,17 +178,17 @@ export default function TtmRatePanel({
         const isOverridden = overrideValue != null;
         const displayRate = isOverridden ? overrideValue : entry.rate;
 
-        let borderColor = "#14532d";
-        let statusBadgeBg = "#14532d";
+        let borderColor = withAlpha(MINT, 0.2);
+        let statusBadgeBg = withAlpha(MINT, 0.2);
         let statusLabel = "自動取得 ✓";
 
         if (isOverridden) {
-          borderColor = "#1e3a5f";
-          statusBadgeBg = "#1e3a5f";
+          borderColor = withAlpha(BLUE, 0.25);
+          statusBadgeBg = withAlpha(BLUE, 0.25);
           statusLabel = "手動上書き";
         } else if (entry.isAdjusted) {
-          borderColor = "#78350f";
-          statusBadgeBg = "#78350f";
+          borderColor = withAlpha(ORANGE, 0.3);
+          statusBadgeBg = withAlpha(ORANGE, 0.3);
           statusLabel = "日付繰上げ";
         }
 
@@ -204,8 +205,8 @@ export default function TtmRatePanel({
                   key={u}
                   style={styles.badge(
                     u === "給与所得"
-                      ? "rgba(251,191,36,0.2)"
-                      : "rgba(96,165,250,0.2)"
+                      ? withAlpha(ORANGE, 0.2)
+                      : withAlpha(BLUE, 0.2)
                   )}
                 >
                   {u}
@@ -254,7 +255,7 @@ export default function TtmRatePanel({
                 <span
                   style={{
                     fontSize: 11,
-                    color: "#64748b",
+                    color: withAlpha(OLIVE, 0.7),
                     fontFamily: "'IBM Plex Sans', sans-serif",
                   }}
                 >

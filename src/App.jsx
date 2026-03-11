@@ -4,6 +4,7 @@ import PdfDropZone from "./components/PdfDropZone";
 import TransactionEditor from "./components/TransactionEditor";
 import TtmRatePanel from "./components/TtmRatePanel";
 import Dashboard from "./components/Dashboard";
+import { BLACK, BLUE, OLIVE, ORANGE, MINT, RED, withAlpha } from "./lib/colors";
 
 const STEPS = [
   { id: 1, label: "PDF読み込み" },
@@ -20,14 +21,14 @@ const globalStyles = `
   @font-face { font-family: 'IBM Plex Sans'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/IBMPlexSans-variable.woff2') format('woff2'); }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: #0a0e1a;
-    color: #e2e8f0;
+    background: ${BLACK};
+    color: ${MINT};
     font-family: 'IBM Plex Sans', sans-serif;
     min-height: 100vh;
   }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: ${withAlpha(OLIVE, 0.5)}; border-radius: 3px; }
 `;
 
 const styles = {
@@ -45,21 +46,21 @@ const styles = {
   title: {
     fontSize: 28,
     fontWeight: 700,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Mono', monospace",
     letterSpacing: "-0.02em",
   },
   subtitle: {
     fontSize: 13,
-    color: "#64748b",
+    color: OLIVE,
     marginTop: 4,
     fontFamily: "'IBM Plex Sans', sans-serif",
   },
   resetBtn: {
-    background: "rgba(248,113,113,0.1)",
-    border: "1px solid rgba(248,113,113,0.3)",
+    background: withAlpha(RED, 0.1),
+    border: `1px solid ${withAlpha(RED, 0.3)}`,
     borderRadius: 8,
-    color: "#f87171",
+    color: RED,
     padding: "8px 16px",
     cursor: "pointer",
     fontSize: 13,
@@ -72,7 +73,7 @@ const styles = {
     marginBottom: 28,
     borderRadius: 10,
     overflow: "hidden",
-    background: "rgba(15,23,42,0.5)",
+    background: withAlpha(BLACK, 0.5),
   },
   stepTab: (isActive, isCompleted) => ({
     flex: 1,
@@ -81,11 +82,11 @@ const styles = {
     fontSize: 13,
     fontWeight: 500,
     cursor: "pointer",
-    background: isActive ? "#1e2d3d" : "transparent",
-    color: isCompleted ? "#4ade80" : isActive ? "#e2e8f0" : "#64748b",
+    background: isActive ? withAlpha(BLUE, 0.1) : "transparent",
+    color: isCompleted ? MINT : isActive ? MINT : withAlpha(OLIVE, 0.7),
     fontFamily: "'IBM Plex Sans', sans-serif",
     transition: "all 0.2s",
-    borderBottom: isActive ? "2px solid #6366f1" : "2px solid transparent",
+    borderBottom: isActive ? `2px solid ${BLUE}` : "2px solid transparent",
   }),
   content: {
     minHeight: 300,
@@ -99,9 +100,9 @@ const styles = {
   navBtn: (isPrimary) => ({
     padding: "10px 28px",
     borderRadius: 8,
-    border: isPrimary ? "none" : "1px solid #334155",
-    background: isPrimary ? "#6366f1" : "transparent",
-    color: isPrimary ? "#fff" : "#94a3b8",
+    border: isPrimary ? "none" : `1px solid ${withAlpha(OLIVE, 0.3)}`,
+    background: isPrimary ? BLUE : "transparent",
+    color: isPrimary ? BLACK : OLIVE,
     fontSize: 14,
     fontWeight: 500,
     cursor: "pointer",
@@ -146,6 +147,41 @@ export default function App() {
     return false;
   };
 
+  const deadlineStyle = {
+    fontSize: 12,
+    fontFamily: "'IBM Plex Sans', sans-serif",
+    fontWeight: 500,
+    padding: "6px 14px",
+    borderRadius: 8,
+    background:
+      deadline <= 0
+        ? withAlpha(OLIVE, 0.15)
+        : deadline <= 7
+          ? withAlpha(RED, 0.15)
+          : deadline <= 30
+            ? withAlpha(ORANGE, 0.15)
+            : withAlpha(MINT, 0.1),
+    color:
+      deadline <= 0
+        ? OLIVE
+        : deadline <= 7
+          ? RED
+          : deadline <= 30
+            ? ORANGE
+            : MINT,
+    border: `1px solid ${
+      deadline <= 0
+        ? withAlpha(OLIVE, 0.3)
+        : deadline <= 7
+          ? withAlpha(RED, 0.3)
+          : deadline <= 30
+            ? withAlpha(ORANGE, 0.3)
+            : withAlpha(MINT, 0.2)
+    }`,
+    maxWidth: 320,
+    lineHeight: 1.5,
+  };
+
   return (
     <>
       <style>{globalStyles}</style>
@@ -158,42 +194,7 @@ export default function App() {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div
-              style={{
-                fontSize: 12,
-                fontFamily: "'IBM Plex Sans', sans-serif",
-                fontWeight: 500,
-                padding: "6px 14px",
-                borderRadius: 8,
-                background:
-                  deadline <= 0
-                    ? "rgba(100,116,139,0.15)"
-                    : deadline <= 7
-                      ? "rgba(248,113,113,0.15)"
-                      : deadline <= 30
-                        ? "rgba(251,191,36,0.15)"
-                        : "rgba(74,222,128,0.1)",
-                color:
-                  deadline <= 0
-                    ? "#94a3b8"
-                    : deadline <= 7
-                      ? "#f87171"
-                      : deadline <= 30
-                        ? "#fbbf24"
-                        : "#4ade80",
-                border: `1px solid ${
-                  deadline <= 0
-                    ? "rgba(100,116,139,0.3)"
-                    : deadline <= 7
-                      ? "rgba(248,113,113,0.3)"
-                      : deadline <= 30
-                        ? "rgba(251,191,36,0.3)"
-                        : "rgba(74,222,128,0.2)"
-                }`,
-                maxWidth: 320,
-                lineHeight: 1.5,
-              }}
-            >
+            <div style={deadlineStyle}>
               {deadline > 0
                 ? `確定申告 締切まであと ${deadline}日`
                 : "2025年分の確定申告は締切です。念の為、税務署へご確認ください。"}

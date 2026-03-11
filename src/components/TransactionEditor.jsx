@@ -1,4 +1,5 @@
 import { isWeekend, isMissingFromData } from "../lib/ttmLoader";
+import { BLACK, BLUE, OLIVE, ORANGE, MINT, RED, withAlpha } from "../lib/colors";
 
 const DAY_NAMES = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -17,7 +18,7 @@ const styles = {
   sectionTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Sans', sans-serif",
     marginBottom: 12,
     display: "flex",
@@ -30,14 +31,14 @@ const styles = {
     padding: "3px 8px",
     borderRadius: 4,
     background: color,
-    color: "#e2e8f0",
+    color: MINT,
     fontFamily: "'IBM Plex Sans', sans-serif",
     textTransform: "uppercase",
     letterSpacing: "0.04em",
   }),
   divider: {
     height: 1,
-    background: "#1e293b",
+    background: withAlpha(OLIVE, 0.3),
     margin: "28px 0",
   },
   table: {
@@ -49,9 +50,9 @@ const styles = {
   th: {
     padding: "10px 8px",
     textAlign: "left",
-    color: "#94a3b8",
+    color: OLIVE,
     fontWeight: 500,
-    borderBottom: "1px solid #1e293b",
+    borderBottom: `1px solid ${withAlpha(OLIVE, 0.3)}`,
     fontSize: 11,
     textTransform: "uppercase",
     letterSpacing: "0.05em",
@@ -60,19 +61,19 @@ const styles = {
   },
   td: {
     padding: "10px 8px",
-    color: "#e2e8f0",
-    borderBottom: "1px solid rgba(30,41,59,0.5)",
+    color: MINT,
+    borderBottom: `1px solid ${withAlpha(OLIVE, 0.2)}`,
     whiteSpace: "nowrap",
   },
   dateWarning: {
-    color: "#fcd34d",
+    color: ORANGE,
     fontSize: 11,
   },
   input: {
-    background: "rgba(30,45,61,0.6)",
-    border: "1px solid #334155",
+    background: withAlpha(OLIVE, 0.15),
+    border: `1px solid ${withAlpha(OLIVE, 0.3)}`,
     borderRadius: 6,
-    color: "#e2e8f0",
+    color: MINT,
     padding: "6px 8px",
     fontSize: 13,
     fontFamily: "'IBM Plex Mono', monospace",
@@ -81,10 +82,10 @@ const styles = {
     MozAppearance: "textfield",
   },
   deleteBtn: {
-    background: "rgba(248,113,113,0.15)",
-    border: "1px solid rgba(248,113,113,0.3)",
+    background: withAlpha(RED, 0.15),
+    border: `1px solid ${withAlpha(RED, 0.3)}`,
     borderRadius: 6,
-    color: "#f87171",
+    color: RED,
     padding: "4px 10px",
     cursor: "pointer",
     fontSize: 12,
@@ -92,14 +93,14 @@ const styles = {
   },
   emptyState: {
     textAlign: "center",
-    color: "#64748b",
+    color: OLIVE,
     padding: "48px 0",
     fontFamily: "'IBM Plex Sans', sans-serif",
     fontSize: 14,
   },
   emptySection: {
     textAlign: "center",
-    color: "#64748b",
+    color: OLIVE,
     padding: "20px 0",
     fontFamily: "'IBM Plex Sans', sans-serif",
     fontSize: 13,
@@ -136,7 +137,7 @@ export default function TransactionEditor({
 
       {/* Vest（給与所得）セクション */}
       <div style={styles.sectionTitle}>
-        <span style={styles.sectionBadge("rgba(251,191,36,0.25)")}>
+        <span style={styles.sectionBadge(withAlpha(ORANGE, 0.25))}>
           給与所得
         </span>
         Release Confirmation（Vest）
@@ -171,7 +172,7 @@ export default function TransactionEditor({
                     {needsWarning ? (
                       <span style={styles.dateWarning}> ({dayName})</span>
                     ) : (
-                      <span style={{ color: "#64748b", fontSize: 11 }}>
+                      <span style={{ color: withAlpha(OLIVE, 0.7), fontSize: 11 }}>
                         {" "}
                         ({dayName})
                       </span>
@@ -181,7 +182,7 @@ export default function TransactionEditor({
                   <td style={styles.td}>{fmtU(v.fmvPerShare)}</td>
                   <td style={styles.td}>{fmtU(v.fmvTotal)}</td>
                   <td style={styles.td}>
-                    <span style={{ color: "#64748b", fontSize: 12 }}>
+                    <span style={{ color: withAlpha(OLIVE, 0.7), fontSize: 12 }}>
                       {v.awardNumber || "—"}
                     </span>
                   </td>
@@ -204,7 +205,7 @@ export default function TransactionEditor({
 
       {/* Trade（売却）セクション */}
       <div style={styles.sectionTitle}>
-        <span style={styles.sectionBadge("rgba(96,165,250,0.25)")}>
+        <span style={styles.sectionBadge(withAlpha(BLUE, 0.25))}>
           譲渡所得
         </span>
         Trade Confirmation（売却）
@@ -234,7 +235,7 @@ export default function TransactionEditor({
                   <td style={styles.td}>{i + 1}</td>
                   <td style={styles.td}>
                     {t.tradeDate}
-                    <span style={{ color: "#64748b", fontSize: 11 }}>
+                    <span style={{ color: withAlpha(OLIVE, 0.7), fontSize: 11 }}>
                       {" "}
                       ({dayName})
                     </span>

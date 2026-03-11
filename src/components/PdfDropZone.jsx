@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { BLACK, BLUE, OLIVE, ORANGE, MINT, RED, withAlpha } from "../lib/colors";
 
 const styles = {
   container: {
@@ -6,12 +7,12 @@ const styles = {
     margin: "0 auto",
   },
   dropZone: (isDragging) => ({
-    border: `2px dashed ${isDragging ? "#6366f1" : "#334155"}`,
+    border: `2px dashed ${isDragging ? BLUE : withAlpha(OLIVE, 0.3)}`,
     borderRadius: 12,
     padding: "48px 24px",
     textAlign: "center",
     cursor: "pointer",
-    background: isDragging ? "rgba(99,102,241,0.08)" : "rgba(30,45,61,0.3)",
+    background: isDragging ? withAlpha(BLUE, 0.08) : withAlpha(OLIVE, 0.1),
     transition: "all 0.2s",
   }),
   icon: {
@@ -21,18 +22,18 @@ const styles = {
   title: {
     fontSize: 18,
     fontWeight: 600,
-    color: "#e2e8f0",
+    color: MINT,
     marginBottom: 8,
     fontFamily: "'IBM Plex Sans', sans-serif",
   },
   subtitle: {
     fontSize: 13,
-    color: "#94a3b8",
+    color: OLIVE,
     fontFamily: "'IBM Plex Sans', sans-serif",
   },
   parsingText: {
     fontSize: 14,
-    color: "#fbbf24",
+    color: ORANGE,
     marginTop: 16,
     fontFamily: "'IBM Plex Mono', monospace",
   },
@@ -41,14 +42,14 @@ const styles = {
     maxHeight: 140,
     overflowY: "auto",
     borderRadius: 8,
-    background: "rgba(15,23,42,0.6)",
+    background: withAlpha(BLACK, 0.6),
     padding: 12,
   },
   logEntry: (type) => ({
     fontSize: 12,
     fontFamily: "'IBM Plex Mono', monospace",
     color:
-      type === "success" ? "#86efac" : type === "warn" ? "#fbbf24" : "#f87171",
+      type === "success" ? MINT : type === "warn" ? ORANGE : RED,
     marginBottom: 4,
     lineHeight: 1.5,
   }),
