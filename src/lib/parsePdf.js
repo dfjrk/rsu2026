@@ -116,6 +116,12 @@ export function parseTradeConfirmation(text, fileName) {
  * @returns {Promise<string>}
  */
 export async function extractTextFromPdf(file) {
+  if (!file.name.toLowerCase().endsWith(".pdf")) {
+    throw new Error("PDFファイルのみ対応しています");
+  }
+  if (file.type && file.type !== "application/pdf") {
+    throw new Error("無効なファイル形式です");
+  }
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
   const pages = [];

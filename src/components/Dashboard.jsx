@@ -216,7 +216,7 @@ export default function Dashboard({
     { label: "給与所得算入額", value: totals.kyuyo, color: "#fbbf24" },
     { label: "譲渡収入合計", value: totals.sell, color: "#60a5fa" },
     { label: "取得費合計", value: totals.cost, color: "#94a3b8" },
-    { label: "Wire手数料", value: totals.wire, color: "#94a3b8" },
+    { label: "Disbursement Fee", value: totals.wire, color: "#94a3b8" },
     {
       label: "株式譲渡損益",
       value: totals.jotoPL,
@@ -320,8 +320,8 @@ export default function Dashboard({
                 "売却収入($)",
                 "TTM",
                 "売却収入(¥)",
-                "Wire($)",
-                "Wire(¥)",
+                "D.Fee($)",
+                "D.Fee(¥)",
               ].map((h, i) => (
                 <th
                   key={h}
@@ -395,18 +395,37 @@ export default function Dashboard({
       </div>
 
       <div style={styles.notes}>
-        • TTMデータ出典: 三菱UFJ銀行（murc_ttm_2025.json、245営業日分収録）
+        <strong>為替レートについて</strong>
         <br />
-        • ⚠ 印のTTM参照日はレート未公表日のため直前の公表日を自動使用（国税庁ルール）
+        本ツールでは、円換算に使用するTTM（仲値）データとして、三菱UFJ銀行の公表レートをもとに作成したデータを使用しています。
+        <br /><br />
+        <strong>レートが公表されていない日の扱いについて</strong>
         <br />
-        • 日本源泉税 $0（Release Confirmation確認済） —
-        給与所得・譲渡所得とも自己申告が必要です
+        土日祝日などで対象日のTTMが公表されていない場合は、直前の公表日のレートを使用しています。
+        <br /><br />
+        <strong>日本での源泉徴収について</strong>
         <br />
-        • 取得費（③）＝ 給与所得算入額（①）と同額が原則（二重課税防止）
+        Release Confirmation上で日本の源泉徴収額が0と表示されている場合でも、日本での申告が不要になるとは限りません。
         <br />
-        • Wire手数料の譲渡費用控除可否は税理士に確認してください
+        RSUの権利確定時の給与課税や、その後の売却に伴う譲渡所得については、ご自身で申告が必要となる場合があります。
+        <br /><br />
+        <strong>取得費について</strong>
         <br />
-        • 本ツールは情報整理目的のみです。申告前に必ず税理士にご確認ください
+        RSUを売却した場合、取得費は原則として、権利確定時に給与所得として計上した金額を基準に考えます。
+        <br />
+        これは、同じ金額に二重で課税されることを避けるためです。
+        <br /><br />
+        <strong>手数料の扱いについて</strong>
+        <br />
+        Disbursement Feeなどの手数料が譲渡費用として控除できるかどうかは、取引内容や申告方法によって判断が分かれる可能性があります。
+        <br />
+        最終的な取り扱いは、税理士または所轄税務署にご確認ください。
+        <br /><br />
+        <strong>ご利用上の注意</strong>
+        <br />
+        本ツールは、RSUに関する情報整理および申告準備を補助することを目的としたものであり、税務アドバイスを提供するものではありません。
+        <br />
+        実際の申告内容については、ご自身の責任でご確認いただき、必要に応じて税理士等の専門家へご相談ください。
       </div>
     </div>
   );

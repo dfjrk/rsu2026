@@ -222,7 +222,7 @@ export default function TransactionEditor({
               <th style={styles.th}>株数</th>
               <th style={styles.th}>単価($)</th>
               <th style={styles.th}>売却収入($)</th>
-              <th style={styles.th}>Wire手数料($)</th>
+              <th style={styles.th}>Disbursement Fee($)</th>
               <th style={styles.th}></th>
             </tr>
           </thead>
