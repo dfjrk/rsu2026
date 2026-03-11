@@ -211,13 +211,14 @@ export default function App() {
           >
             ← 戻る
           </button>
-          <button
-            style={styles.navBtn(true)}
-            onClick={() => setStep((s) => Math.min(4, s + 1))}
-            disabled={step === 4}
-          >
-            次へ →
-          </button>
+          {step < 4 && (
+            <button
+              style={styles.navBtn(true)}
+              onClick={() => setStep((s) => Math.min(4, s + 1))}
+            >
+              次へ →
+            </button>
+          )}
         </div>
       </div>
     </>

@@ -1,6 +1,85 @@
+import { useState, useEffect, useMemo } from "react";
+
 const fmt = (n) => n.toLocaleString("ja-JP", { maximumFractionDigits: 0 });
 const fmtU = (n) =>
   "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2 });
+
+const CONFETTI_COLORS = [
+  "#fbbf24",
+  "#f87171",
+  "#6366f1",
+  "#34d399",
+  "#60a5fa",
+  "#f472b6",
+  "#a78bfa",
+  "#fb923c",
+];
+
+const confettiKeyframes = `
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(calc(100vh + 40px)) rotate(var(--rot)) scale(0.5); opacity: 0; }
+}
+@keyframes confetti-burst {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  15% { opacity: 1; scale: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.3); opacity: 0; }
+}
+`;
+
+function generateParticles(count) {
+  const particles = [];
+  for (let i = 0; i < count; i++) {
+    const left = Math.random() * 100;
+    const delay = Math.random() * 0.6;
+    const duration = 1.8 + Math.random() * 1.5;
+    const color =
+      CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    const rot = (Math.random() * 720 - 360) + "deg";
+    const size = 6 + Math.random() * 6;
+    const isRect = Math.random() > 0.5;
+
+    particles.push({
+      id: i,
+      style: {
+        position: "fixed",
+        top: -20,
+        left: `${left}%`,
+        width: isRect ? size * 1.5 : size,
+        height: size,
+        borderRadius: isRect ? 2 : "50%",
+        background: color,
+        animation: `confetti-fall ${duration}s ease-in ${delay}s forwards`,
+        zIndex: 9999,
+        pointerEvents: "none",
+        "--rot": rot,
+      },
+    });
+  }
+  return particles;
+}
+
+function ConfettiOverlay() {
+  const [visible, setVisible] = useState(true);
+  const particles = useMemo(() => generateParticles(60), []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(false), 3500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <>
+      <style>{confettiKeyframes}</style>
+      {particles.map((p) => (
+        <div key={p.id} style={p.style} />
+      ))}
+    </>
+  );
+}
 
 const styles = {
   container: {
@@ -147,6 +226,7 @@ export default function Dashboard({
 
   return (
     <div style={styles.container}>
+      <ConfettiOverlay />
       <div style={styles.summaryGrid}>
         {summaryCards.map((card) => (
           <div key={card.label} style={styles.summaryCard(card.color)}>

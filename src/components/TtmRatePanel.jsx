@@ -112,13 +112,16 @@ export default function TtmRatePanel({
       if (!dateMap.has(key)) {
         dateMap.set(key, {
           resolvedDate: key,
-          originalDate: v.releaseDate,
           isAdjusted: lookup.isAdjusted,
           rate: lookup.rate,
-          usages: [],
+          sources: [],
         });
       }
-      dateMap.get(key).usages.push("給与所得");
+      dateMap.get(key).sources.push({
+        originalDate: v.releaseDate,
+        label: "給与所得",
+        type: "vest",
+      });
     });
 
     tradeTransactions.forEach((t) => {
@@ -127,13 +130,16 @@ export default function TtmRatePanel({
       if (!dateMap.has(key)) {
         dateMap.set(key, {
           resolvedDate: key,
-          originalDate: t.tradeDate,
           isAdjusted: lookup.isAdjusted,
           rate: lookup.rate,
-          usages: [],
+          sources: [],
         });
       }
-      dateMap.get(key).usages.push("売却収入");
+      dateMap.get(key).sources.push({
+        originalDate: t.tradeDate,
+        label: "売却収入",
+        type: "trade",
+      });
     });
 
     return Array.from(dateMap.values()).sort((a, b) =>
@@ -185,13 +191,15 @@ export default function TtmRatePanel({
           statusLabel = "日付繰上げ";
         }
 
-        const uniqueUsages = [...new Set(entry.usages)];
+        const uniqueLabels = [
+          ...new Set(entry.sources.map((s) => s.label)),
+        ];
 
         return (
           <div key={entry.resolvedDate} style={styles.card(borderColor)}>
             <div style={styles.badgeRow}>
               <span style={styles.badge(statusBadgeBg)}>{statusLabel}</span>
-              {uniqueUsages.map((u) => (
+              {uniqueLabels.map((u) => (
                 <span
                   key={u}
                   style={styles.badge(
@@ -205,13 +213,24 @@ export default function TtmRatePanel({
               ))}
             </div>
 
-            <div style={styles.dateLabel}>
-              参照日: {getDayLabel(entry.resolvedDate)}
-            </div>
+            {entry.sources.map((src, si) => (
+              <div key={si} style={styles.dateLabel}>
+                {src.type === "vest" ? "Vest日" : "売却日"}:{" "}
+                {getDayLabel(src.originalDate)}
+              </div>
+            ))}
 
             {entry.isAdjusted && (
               <div style={styles.adjustReason}>
-                {getDayLabel(entry.originalDate)} は非営業日 → 直前の公表日
+                {getDayLabel(entry.sources[0].originalDate)} は非営業日 →
+                直前の {getDayLabel(entry.resolvedDate)}{" "}
+                公表日のTTMを参照
+              </div>
+            )}
+
+            {!entry.isAdjusted && (
+              <div style={styles.dateLabel}>
+                TTM参照日: {getDayLabel(entry.resolvedDate)}
               </div>
             )}
 
