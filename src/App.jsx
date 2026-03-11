@@ -122,6 +122,8 @@ export default function App() {
     tradeTransactions,
     totals,
     handleFiles,
+    addVest,
+    addTrade,
     removeVest,
     removeTrade,
     updateTradeField,
@@ -237,6 +239,8 @@ export default function App() {
             <TransactionEditor
               vestData={vestData}
               tradeData={tradeData}
+              addVest={addVest}
+              addTrade={addTrade}
               removeVest={removeVest}
               removeTrade={removeTrade}
               updateTradeField={updateTradeField}

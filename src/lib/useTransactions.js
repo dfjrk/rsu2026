@@ -119,6 +119,22 @@ export function useTransactions() {
     });
   }, []);
 
+  const addVest = useCallback((data) => {
+    setVestData((prev) => {
+      const next = [...prev, data];
+      next.sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
+      return next;
+    });
+  }, []);
+
+  const addTrade = useCallback((data) => {
+    setTradeData((prev) => {
+      const next = [...prev, data];
+      next.sort((a, b) => a.tradeDate.localeCompare(b.tradeDate));
+      return next;
+    });
+  }, []);
+
   const resetAll = useCallback(() => {
     setVestData([]);
     setTradeData([]);
@@ -192,6 +208,8 @@ export function useTransactions() {
     tradeTransactions,
     totals,
     handleFiles,
+    addVest,
+    addTrade,
     removeVest,
     removeTrade,
     updateTradeField,
