@@ -1,6 +1,6 @@
-# RSU Tax JP
+# RSU Mate
 
-米国株RSU 確定申告サポートツール（E*TRADE / Morgan Stanley）
+米国株RSUのVestおよび譲渡時の確定申告をサポートします。(E*TRADE、Morgan Stanley)
 
 ## セットアップ
 ```bash

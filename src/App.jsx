@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTransactions } from "./lib/useTransactions";
 import PdfDropZone from "./components/PdfDropZone";
 import TransactionEditor from "./components/TransactionEditor";
@@ -126,6 +126,15 @@ export default function App() {
 
   const hasData = vestData.length > 0 || tradeData.length > 0;
 
+  const deadline = useMemo(() => {
+    const target = new Date(2026, 2, 16); // 2026/03/16
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    target.setHours(0, 0, 0, 0);
+    const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+    return diff;
+  }, []);
+
   const stepCompleted = (s) => {
     if (s === 1) return hasData;
     if (s === 2) return hasData;
@@ -139,22 +148,64 @@ export default function App() {
       <div style={styles.app}>
         <div style={styles.header}>
           <div>
-            <div style={styles.title}>RSU Tax JP</div>
+            <div style={styles.title}>RSU Mate</div>
             <div style={styles.subtitle}>
-              米国株RSU 確定申告サポートツール（E*TRADE / Morgan Stanley）
+              米国株RSUのVestおよび譲渡時の確定申告をサポートします。(E*TRADE、Morgan Stanley)
             </div>
           </div>
-          {hasData && (
-            <button
-              style={styles.resetBtn}
-              onClick={() => {
-                setStep(1);
-                resetAll();
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div
+              style={{
+                fontSize: 12,
+                fontFamily: "'IBM Plex Sans', sans-serif",
+                fontWeight: 500,
+                padding: "6px 14px",
+                borderRadius: 8,
+                background:
+                  deadline <= 0
+                    ? "rgba(100,116,139,0.15)"
+                    : deadline <= 7
+                      ? "rgba(248,113,113,0.15)"
+                      : deadline <= 30
+                        ? "rgba(251,191,36,0.15)"
+                        : "rgba(74,222,128,0.1)",
+                color:
+                  deadline <= 0
+                    ? "#94a3b8"
+                    : deadline <= 7
+                      ? "#f87171"
+                      : deadline <= 30
+                        ? "#fbbf24"
+                        : "#4ade80",
+                border: `1px solid ${
+                  deadline <= 0
+                    ? "rgba(100,116,139,0.3)"
+                    : deadline <= 7
+                      ? "rgba(248,113,113,0.3)"
+                      : deadline <= 30
+                        ? "rgba(251,191,36,0.3)"
+                        : "rgba(74,222,128,0.2)"
+                }`,
+                maxWidth: 320,
+                lineHeight: 1.5,
               }}
             >
-              リセット
-            </button>
-          )}
+              {deadline > 0
+                ? `確定申告 締切まであと ${deadline}日`
+                : "2025年分の確定申告は締切です。念の為、税務署へご確認ください。"}
+            </div>
+            {hasData && (
+              <button
+                style={styles.resetBtn}
+                onClick={() => {
+                  setStep(1);
+                  resetAll();
+                }}
+              >
+                リセット
+              </button>
+            )}
+          </div>
         </div>
 
         <div style={styles.stepBar}>
