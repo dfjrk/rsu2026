@@ -91,10 +91,10 @@ export default function PdfDropZone({ onFiles, parsing, parseLog }) {
       >
         <div style={styles.icon}>📄</div>
         <div style={styles.title}>
-          Release Confirmation PDF をドロップ
+          Release / Trade Confirmation PDF をドロップ
         </div>
         <div style={styles.subtitle}>
-          またはクリックしてファイルを選択（複数可）
+          またはクリックしてファイルを選択（複数可・種類混在OK）
         </div>
         <input
           ref={inputRef}

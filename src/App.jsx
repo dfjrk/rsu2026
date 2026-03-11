@@ -190,7 +190,7 @@ export default function App() {
           <div>
             <div style={styles.title}>RSU Mate</div>
             <div style={styles.subtitle}>
-              米国株RSUのVestおよび譲渡時の確定申告をサポートします。(E*TRADE、Morgan Stanley)
+              米国株RSUのVestおよび譲渡時の確定申告をサポートします。(E*TRADE from Morgan Stanley)
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

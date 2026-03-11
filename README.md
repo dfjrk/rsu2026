@@ -2,7 +2,7 @@
 
 米国株RSU（譲渡制限付株式）のVest（権利確定）および売却時の確定申告をサポートするローカル専用ツールです。
 
-対応証券会社: E*TRADE、Morgan Stanley
+対応証券会社: E*TRADE from Morgan Stanley
 
 ## セットアップ
 
