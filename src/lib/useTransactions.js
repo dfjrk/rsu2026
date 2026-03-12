@@ -172,8 +172,10 @@ export function useTransactions() {
       const tradeRateDateAdjusted = tradeLookup.isAdjusted;
       const tradeTTM = manualOverrides[tradeRateDate] ?? tradeLookup.rate;
       const tradeOverridden = manualOverrides[tradeRateDate] != null;
+      const transactionFee = t.transactionFee ? parseFloat(t.transactionFee) : 0;
       const wireFee = t.wireFee ? parseFloat(t.wireFee) : 0;
       const sellJPY = tradeTTM ? Math.round(t.netAmount * tradeTTM) : null;
+      const transactionFeeJPY = tradeTTM ? Math.round(transactionFee * tradeTTM) : null;
       const wireFeeJPY = tradeTTM ? Math.round(wireFee * tradeTTM) : null;
 
       return {
@@ -182,8 +184,10 @@ export function useTransactions() {
         tradeRateDateAdjusted,
         tradeTTM,
         tradeOverridden,
+        transactionFee,
         wireFee,
         sellJPY,
+        transactionFeeJPY,
         wireFeeJPY,
       };
     });
@@ -192,13 +196,17 @@ export function useTransactions() {
   const totals = useMemo(() => {
     const kyuyo = vestTransactions.reduce((s, v) => s + (v.kyuyoJPY || 0), 0);
     const sell = tradeTransactions.reduce((s, t) => s + (t.sellJPY || 0), 0);
+    const txFee = tradeTransactions.reduce(
+      (s, t) => s + (t.transactionFeeJPY || 0),
+      0
+    );
     const wire = tradeTransactions.reduce(
       (s, t) => s + (t.wireFeeJPY || 0),
       0
     );
-    const jotoPL = sell - kyuyo - wire;
+    const jotoPL = sell - kyuyo - txFee - wire;
 
-    return { kyuyo, sell, cost: kyuyo, wire, jotoPL };
+    return { kyuyo, sell, cost: kyuyo, txFee, wire, jotoPL };
   }, [vestTransactions, tradeTransactions]);
 
   return {

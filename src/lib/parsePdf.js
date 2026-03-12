@@ -92,6 +92,12 @@ export function parseTradeConfirmation(text, fileName) {
       ? parseFloat(netAmountMatch[1].replace(/,/g, ""))
       : Math.round(quantity * price * 100) / 100;
 
+    // Transaction Fee
+    const txFeeMatch = text.match(/Transaction\s+Fee\s+\$?([\d,]+\.[\d]+)/);
+    const transactionFee = txFeeMatch
+      ? parseFloat(txFeeMatch[1].replace(/,/g, ""))
+      : 0;
+
     // Symbol
     const symbolMatch = text.match(/Symbol\s*\/\s*CUSIP\s*\/\s*ISIN\s*:\s*(\w+)/);
     const symbol = symbolMatch ? symbolMatch[1] : "";
@@ -101,6 +107,7 @@ export function parseTradeConfirmation(text, fileName) {
       tradeDate: tradeDateFormatted,
       quantity,
       price,
+      transactionFee,
       netAmount,
       symbol,
       fileName,

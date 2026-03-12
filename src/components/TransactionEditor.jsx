@@ -270,6 +270,14 @@ function TradeInputRow({ onAdd }) {
         <input
           type="number"
           placeholder="0.00"
+          disabled
+          style={{ ...styles.inputSmall, opacity: 0.4 }}
+        />
+      </td>
+      <td style={styles.td}>
+        <input
+          type="number"
+          placeholder="0.00"
           value={draft.netAmount}
           onChange={(e) => update("netAmount", e.target.value)}
           style={styles.inputSmall}
@@ -378,6 +386,7 @@ export default function TransactionEditor({
             <th style={styles.th}>売却日</th>
             <th style={styles.th}>株数</th>
             <th style={styles.th}>単価($)</th>
+            <th style={styles.th}>Transaction Fee($)</th>
             <th style={styles.th}>売却収入($)</th>
             <th style={styles.th}>Disbursement Fee($)</th>
             <th style={styles.th}></th>
@@ -398,6 +407,17 @@ export default function TransactionEditor({
                 </td>
                 <td style={styles.td}>{t.quantity}</td>
                 <td style={styles.td}>{fmtU(t.price)}</td>
+                <td style={styles.td}>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={t.transactionFee || ""}
+                    onChange={(e) =>
+                      updateTradeField(t._id, "transactionFee", e.target.value)
+                    }
+                    style={styles.input}
+                  />
+                </td>
                 <td style={styles.td}>{fmtU(t.netAmount)}</td>
                 <td style={styles.td}>
                   <input

@@ -206,6 +206,7 @@ export default function Dashboard({
     { label: "給与所得算入額", value: totals.kyuyo, color: ORANGE },
     { label: "譲渡収入合計", value: totals.sell, color: BLUE },
     { label: "取得費合計", value: totals.cost, color: OLIVE },
+    { label: "Transaction Fee", value: totals.txFee, color: OLIVE },
     { label: "Disbursement Fee", value: totals.wire, color: OLIVE },
     {
       label: "株式譲渡損益",
@@ -310,6 +311,8 @@ export default function Dashboard({
                 "売却収入($)",
                 "TTM",
                 "売却収入(¥)",
+                "Tx.Fee($)",
+                "Tx.Fee(¥)",
                 "D.Fee($)",
                 "D.Fee(¥)",
               ].map((h, i) => (
@@ -326,7 +329,7 @@ export default function Dashboard({
             {tradeTransactions.length === 0 ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={11}
                   style={{
                     ...styles.td,
                     ...styles.tdLeft,
@@ -371,6 +374,10 @@ export default function Dashboard({
                     </td>
                     <td style={styles.td}>
                       {t.sellJPY != null ? `¥${fmt(t.sellJPY)}` : "—"}
+                    </td>
+                    <td style={styles.td}>{fmtU(t.transactionFee)}</td>
+                    <td style={styles.td}>
+                      {t.transactionFeeJPY != null ? `¥${fmt(t.transactionFeeJPY)}` : "—"}
                     </td>
                     <td style={styles.td}>{fmtU(t.wireFee)}</td>
                     <td style={styles.td}>
