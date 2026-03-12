@@ -4,6 +4,31 @@
 
 対応証券会社: E*TRADE from Morgan Stanley
 
+## 事前セットアップ
+
+RSU Mate の利用には **Node.js 18以上** / **npm 9以上** が必要です。
+npm は通常 Node.js のインストール時に一緒に導入されます。
+
+> **注意:** `npm install` はプロジェクトの依存パッケージをインストールするコマンドであり、Node.js や npm 本体をインストールするものではありません。
+> Node.js / npm が未導入の場合は、先にインストールを行ってください。
+
+### インストール方法
+
+1. [Node.js 公式サイト](https://nodejs.org/) から **LTS 版** をダウンロードしてインストール（推奨）
+2. macOS で Homebrew を利用している場合は、以下でもインストールできます:
+   ```bash
+   brew install node
+   ```
+
+### バージョン確認
+
+インストール後、ターミナルで以下を実行して確認してください:
+
+```bash
+node -v   # v18.0.0 以上
+npm -v    # 9.0.0 以上
+```
+
 ## セットアップ
 
 ```bash
@@ -15,13 +40,10 @@ npm run rsu
 
 ブラウザが自動で開きます（http://localhost:5173）
 
-### 必要環境
-- Node.js 18以上 / npm 9以上
-
 ## 使い方
 
 1. **STEP 1 — PDF読み込み**: Release Confirmation PDF / Trade Confirmation PDF をアップロード（複数可）
-2. **STEP 2 — データ確認・編集**: 読み込みデータを確認（Vest明細・売却明細を上下段で表示）。Disbursement Fee を入力
+2. **STEP 2 — データ確認・編集**: 読み込みデータを確認（Vest明細・売却明細を上下段で表示）。手動でのデータ追加も可能。Disbursement Fee を入力
 3. **STEP 3 — TTM確認・上書き**: TTMレートを確認（自動取得済）。非営業日は直前公表日を自動参照。必要なら手動上書き可能
 4. **STEP 4 — 申告ダッシュボード**: 確定申告用サマリーを確認
 
