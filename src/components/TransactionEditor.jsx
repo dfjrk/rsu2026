@@ -22,7 +22,7 @@ function isValidDate(dateStr) {
 }
 
 const EMPTY_VEST = { releaseDate: "", shares: "", fmvPerShare: "" };
-const EMPTY_TRADE = { tradeDate: "", quantity: "", price: "", netAmount: "" };
+const EMPTY_TRADE = { tradeDate: "", quantity: "", price: "", transactionFee: "", netAmount: "" };
 
 const styles = {
   container: {
@@ -228,6 +228,7 @@ function TradeInputRow({ onAdd }) {
         tradeDate,
         quantity: parseFloat(quantity),
         price: parseFloat(price),
+        transactionFee: draft.transactionFee ? parseFloat(draft.transactionFee) : 0,
         netAmount: parseFloat(netAmount),
         symbol: "",
         fileName: "手動入力",
@@ -270,8 +271,9 @@ function TradeInputRow({ onAdd }) {
         <input
           type="number"
           placeholder="0.00"
-          disabled
-          style={{ ...styles.inputSmall, opacity: 0.4 }}
+          value={draft.transactionFee}
+          onChange={(e) => update("transactionFee", e.target.value)}
+          style={styles.inputSmall}
         />
       </td>
       <td style={styles.td}>
@@ -407,17 +409,7 @@ export default function TransactionEditor({
                 </td>
                 <td style={styles.td}>{t.quantity}</td>
                 <td style={styles.td}>{fmtU(t.price)}</td>
-                <td style={styles.td}>
-                  <input
-                    type="number"
-                    placeholder="0.00"
-                    value={t.transactionFee || ""}
-                    onChange={(e) =>
-                      updateTradeField(t._id, "transactionFee", e.target.value)
-                    }
-                    style={styles.input}
-                  />
-                </td>
+                <td style={styles.td}>{fmtU(t.transactionFee || 0)}</td>
                 <td style={styles.td}>{fmtU(t.netAmount)}</td>
                 <td style={styles.td}>
                   <input

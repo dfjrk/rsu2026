@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useTransactions } from "./lib/useTransactions";
 import PdfDropZone from "./components/PdfDropZone";
 import TransactionEditor from "./components/TransactionEditor";
@@ -142,6 +142,8 @@ export default function App() {
     return diff;
   }, []);
 
+  const contentRef = useRef(null);
+
   const stepCompleted = (s) => {
     if (s === 1) return hasData;
     if (s === 2) return hasData;
@@ -220,14 +222,17 @@ export default function App() {
             <div
               key={s.id}
               style={styles.stepTab(step === s.id, stepCompleted(s.id))}
-              onClick={() => setStep(s.id)}
+              onClick={() => {
+                setStep(s.id);
+                contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
             >
               {s.id}. {s.label}
             </div>
           ))}
         </div>
 
-        <div style={styles.content}>
+        <div ref={contentRef} style={styles.content}>
           {step === 1 && (
             <PdfDropZone
               onFiles={handleFiles}
@@ -266,7 +271,10 @@ export default function App() {
         <div style={styles.navRow}>
           <button
             style={styles.navBtn(false)}
-            onClick={() => setStep((s) => Math.max(1, s - 1))}
+            onClick={() => {
+              setStep((s) => Math.max(1, s - 1));
+              contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
             disabled={step === 1}
           >
             ← 戻る
@@ -274,7 +282,10 @@ export default function App() {
           {step < 4 && (
             <button
               style={styles.navBtn(true)}
-              onClick={() => setStep((s) => Math.min(4, s + 1))}
+              onClick={() => {
+                setStep((s) => Math.min(4, s + 1));
+                contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
             >
               次へ →
             </button>

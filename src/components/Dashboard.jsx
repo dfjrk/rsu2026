@@ -1,34 +1,46 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { BLACK, BLUE, OLIVE, ORANGE, MINT, RED, withAlpha, CONFETTI_COLORS } from "../lib/colors";
 
 const fmt = (n) => n.toLocaleString("ja-JP", { maximumFractionDigits: 0 });
 const fmtU = (n) =>
   "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
-const confettiKeyframes = `
+const celebrationKeyframes = `
 @keyframes confetti-fall {
-  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translateY(calc(100vh + 40px)) rotate(var(--rot)) scale(0.5); opacity: 0; }
+  0% { transform: translateY(-20px) translateX(0) rotate(0deg) scale(1); opacity: 1; }
+  25% { transform: translateY(25vh) translateX(var(--sx)) rotate(var(--r1)) scale(0.95); opacity: 1; }
+  50% { transform: translateY(50vh) translateX(calc(var(--sx) * -0.8)) rotate(var(--r2)) scale(0.85); opacity: 0.9; }
+  75% { transform: translateY(75vh) translateX(var(--sx)) rotate(var(--r1)) scale(0.7); opacity: 0.6; }
+  100% { transform: translateY(calc(100vh + 40px)) translateX(0) rotate(var(--r2)) scale(0.5); opacity: 0; }
 }
-@keyframes confetti-burst {
-  0% { transform: translate(0, 0) scale(0); opacity: 0; }
-  15% { opacity: 1; scale: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.3); opacity: 0; }
+@keyframes card-glow {
+  0% { box-shadow: 0 0 0px transparent; }
+  25% { box-shadow: 0 0 10px ${withAlpha(ORANGE, 0.35)}, 0 0 20px ${withAlpha(ORANGE, 0.15)}; }
+  50% { box-shadow: 0 0 16px ${withAlpha(ORANGE, 0.5)}, 0 0 32px ${withAlpha(ORANGE, 0.25)}; }
+  75% { box-shadow: 0 0 6px ${withAlpha(ORANGE, 0.25)}, 0 0 12px ${withAlpha(ORANGE, 0.1)}; }
+  100% { box-shadow: 0 0 0px transparent; }
+}
+@keyframes pop-in {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.08); opacity: 1; }
+  70% { transform: scale(0.96); }
+  100% { transform: scale(1); opacity: 1; }
 }
 `;
 
-function generateParticles(count) {
+function generateConfetti(count) {
   const particles = [];
   for (let i = 0; i < count; i++) {
     const left = Math.random() * 100;
-    const delay = Math.random() * 0.6;
-    const duration = 1.8 + Math.random() * 1.5;
+    const delay = Math.random() * 6;
+    const duration = 4 + Math.random() * 4;
     const color =
       CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
-    const rot = (Math.random() * 720 - 360) + "deg";
-    const size = 6 + Math.random() * 6;
-    const isRect = Math.random() > 0.5;
+    const sx = (15 + Math.random() * 30) * (Math.random() > 0.5 ? 1 : -1) + "px";
+    const r1 = (Math.random() * 360) + "deg";
+    const r2 = (Math.random() * -360) + "deg";
+    const size = 5 + Math.random() * 6;
+    const isRect = Math.random() > 0.4;
 
     particles.push({
       id: i,
@@ -36,34 +48,29 @@ function generateParticles(count) {
         position: "fixed",
         top: -20,
         left: `${left}%`,
-        width: isRect ? size * 1.5 : size,
+        width: isRect ? size * 1.6 : size,
         height: size,
         borderRadius: isRect ? 2 : "50%",
         background: color,
-        animation: `confetti-fall ${duration}s ease-in ${delay}s forwards`,
+        animation: `confetti-fall ${duration}s ease-in ${delay}s infinite`,
         zIndex: 9999,
         pointerEvents: "none",
-        "--rot": rot,
+        opacity: 0,
+        "--sx": sx,
+        "--r1": r1,
+        "--r2": r2,
       },
     });
   }
   return particles;
 }
 
-function ConfettiOverlay() {
-  const [visible, setVisible] = useState(true);
-  const particles = useMemo(() => generateParticles(60), []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 3500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!visible) return null;
+function CelebrationOverlay() {
+  const particles = useMemo(() => generateConfetti(50), []);
 
   return (
     <>
-      <style>{confettiKeyframes}</style>
+      <style>{celebrationKeyframes}</style>
       {particles.map((p) => (
         <div key={p.id} style={p.style} />
       ))}
@@ -87,6 +94,7 @@ const styles = {
     borderRadius: 12,
     padding: "18px 16px",
     borderLeft: `3px solid ${accentColor}`,
+    animation: "card-glow 3s ease-in-out infinite",
   }),
   summaryLabel: {
     fontSize: 11,
@@ -206,7 +214,6 @@ export default function Dashboard({
     { label: "給与所得算入額", value: totals.kyuyo, color: ORANGE },
     { label: "譲渡収入合計", value: totals.sell, color: BLUE },
     { label: "取得費合計", value: totals.cost, color: OLIVE },
-    { label: "Transaction Fee", value: totals.txFee, color: OLIVE },
     { label: "Disbursement Fee", value: totals.wire, color: OLIVE },
     {
       label: "株式譲渡損益",
@@ -217,12 +224,16 @@ export default function Dashboard({
 
   return (
     <div style={styles.container}>
-      <ConfettiOverlay />
+      <style>{celebrationKeyframes}</style>
+      <CelebrationOverlay />
       <div style={styles.summaryGrid}>
         {summaryCards.map((card) => (
           <div key={card.label} style={styles.summaryCard(card.color)}>
             <div style={styles.summaryLabel}>{card.label}</div>
-            <div style={styles.summaryValue(card.color)}>
+            <div style={{
+              ...styles.summaryValue(card.color),
+              animation: "pop-in 0.6s ease-out both",
+            }}>
               ¥{fmt(card.value)}
             </div>
           </div>
@@ -308,17 +319,15 @@ export default function Dashboard({
                 "売却日",
                 "TTM参照日",
                 "株数",
+                "Tx.Fee($)",
                 "売却収入($)",
                 "TTM",
                 "売却収入(¥)",
-                "Tx.Fee($)",
-                "Tx.Fee(¥)",
-                "D.Fee($)",
                 "D.Fee(¥)",
               ].map((h, i) => (
                 <th
                   key={h}
-                  style={{ ...styles.th, ...(i <= 2 ? styles.thLeft : {}) }}
+                  style={{ ...styles.th, ...(i <= 3 ? styles.thLeft : {}) }}
                 >
                   {h}
                 </th>
@@ -329,7 +338,7 @@ export default function Dashboard({
             {tradeTransactions.length === 0 ? (
               <tr>
                 <td
-                  colSpan={11}
+                  colSpan={9}
                   style={{
                     ...styles.td,
                     ...styles.tdLeft,
@@ -366,6 +375,7 @@ export default function Dashboard({
                       {ttmRefDisplay}
                     </td>
                     <td style={styles.td}>{t.quantity}</td>
+                    <td style={styles.td}>{fmtU(t.transactionFee)}</td>
                     <td style={styles.td}>{fmtU(t.netAmount)}</td>
                     <td style={styles.td}>
                       {t.tradeTTM != null
@@ -375,11 +385,6 @@ export default function Dashboard({
                     <td style={styles.td}>
                       {t.sellJPY != null ? `¥${fmt(t.sellJPY)}` : "—"}
                     </td>
-                    <td style={styles.td}>{fmtU(t.transactionFee)}</td>
-                    <td style={styles.td}>
-                      {t.transactionFeeJPY != null ? `¥${fmt(t.transactionFeeJPY)}` : "—"}
-                    </td>
-                    <td style={styles.td}>{fmtU(t.wireFee)}</td>
                     <td style={styles.td}>
                       {t.wireFeeJPY != null ? `¥${fmt(t.wireFeeJPY)}` : "—"}
                     </td>
