@@ -214,8 +214,8 @@ export default function TtmRatePanel({
               ))}
             </div>
 
-            {entry.sources.map((src, si) => (
-              <div key={si} style={styles.dateLabel}>
+            {entry.sources.map((src) => (
+              <div key={src.originalDate + src.type} style={styles.dateLabel}>
                 {src.type === "vest" ? "Vest日" : "売却日"}:{" "}
                 {getDayLabel(src.originalDate)}
               </div>
