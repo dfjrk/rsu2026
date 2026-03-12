@@ -326,7 +326,7 @@ export default function TransactionEditor({
               isWeekend(v.releaseDate) || isMissingFromData(v.releaseDate);
             const dayName = getDayName(v.releaseDate);
             return (
-              <tr key={v.releaseDate + v.shares + i}>
+              <tr key={v._id}>
                 <td style={styles.td}>{i + 1}</td>
                 <td style={styles.td}>
                   {v.releaseDate}
@@ -350,7 +350,7 @@ export default function TransactionEditor({
                 <td style={styles.td}>
                   <button
                     style={styles.deleteBtn}
-                    onClick={() => removeVest(i)}
+                    onClick={() => removeVest(v._id)}
                   >
                     削除
                   </button>
@@ -387,7 +387,7 @@ export default function TransactionEditor({
           {tradeData.map((t, i) => {
             const dayName = getDayName(t.tradeDate);
             return (
-              <tr key={t.tradeDate + t.quantity + i}>
+              <tr key={t._id}>
                 <td style={styles.td}>{i + 1}</td>
                 <td style={styles.td}>
                   {t.tradeDate}
@@ -405,7 +405,7 @@ export default function TransactionEditor({
                     placeholder="0.00"
                     value={t.wireFee || ""}
                     onChange={(e) =>
-                      updateTradeField(i, "wireFee", e.target.value)
+                      updateTradeField(t._id, "wireFee", e.target.value)
                     }
                     style={styles.input}
                   />
@@ -413,7 +413,7 @@ export default function TransactionEditor({
                 <td style={styles.td}>
                   <button
                     style={styles.deleteBtn}
-                    onClick={() => removeTrade(i)}
+                    onClick={() => removeTrade(t._id)}
                   >
                     削除
                   </button>

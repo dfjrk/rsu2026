@@ -266,7 +266,7 @@ export default function Dashboard({
               );
 
               return (
-                <tr key={i}>
+                <tr key={v._id}>
                   <td style={{ ...styles.td, ...styles.tdLeft }}>{i + 1}</td>
                   <td style={{ ...styles.td, ...styles.tdLeft }}>
                     {v.releaseDate}
@@ -352,7 +352,7 @@ export default function Dashboard({
                 );
 
                 return (
-                  <tr key={i}>
+                  <tr key={t._id}>
                     <td style={{ ...styles.td, ...styles.tdLeft }}>
                       {i + 1}
                     </td>

@@ -1,10 +1,15 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { lookupTTM } from "./ttmLoader";
 import {
   extractTextFromPdf,
   parseReleaseConfirmation,
   parseTradeConfirmation,
 } from "./parsePdf";
+
+let _nextId = 1;
+function genId() {
+  return _nextId++;
+}
 
 export function useTransactions() {
   const [vestData, setVestData] = useState([]);
@@ -46,7 +51,7 @@ export function useTransactions() {
                 `[Vest] 読み込み完了: ${file.name} → ${release.releaseDate}, ${release.shares}株, $${release.fmvPerShare}/株`,
                 "success"
               );
-              const next = [...prev, release];
+              const next = [...prev, { ...release, _id: genId() }];
               next.sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
               return next;
             });
@@ -73,7 +78,7 @@ export function useTransactions() {
                 `[売却] 読み込み完了: ${file.name} → ${trade.tradeDate}, ${trade.quantity}株, $${trade.price}/株, Net $${trade.netAmount}`,
                 "success"
               );
-              const next = [...prev, trade];
+              const next = [...prev, { ...trade, _id: genId() }];
               next.sort((a, b) => a.tradeDate.localeCompare(b.tradeDate));
               return next;
             });
@@ -91,20 +96,18 @@ export function useTransactions() {
     [addLog]
   );
 
-  const removeVest = useCallback((idx) => {
-    setVestData((prev) => prev.filter((_, i) => i !== idx));
+  const removeVest = useCallback((id) => {
+    setVestData((prev) => prev.filter((v) => v._id !== id));
   }, []);
 
-  const removeTrade = useCallback((idx) => {
-    setTradeData((prev) => prev.filter((_, i) => i !== idx));
+  const removeTrade = useCallback((id) => {
+    setTradeData((prev) => prev.filter((t) => t._id !== id));
   }, []);
 
-  const updateTradeField = useCallback((idx, field, value) => {
-    setTradeData((prev) => {
-      const next = [...prev];
-      next[idx] = { ...next[idx], [field]: value };
-      return next;
-    });
+  const updateTradeField = useCallback((id, field, value) => {
+    setTradeData((prev) =>
+      prev.map((t) => (t._id === id ? { ...t, [field]: value } : t))
+    );
   }, []);
 
   const setManualOverride = useCallback((dateStr, value) => {
@@ -121,7 +124,7 @@ export function useTransactions() {
 
   const addVest = useCallback((data) => {
     setVestData((prev) => {
-      const next = [...prev, data];
+      const next = [...prev, { ...data, _id: genId() }];
       next.sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
       return next;
     });
@@ -129,7 +132,7 @@ export function useTransactions() {
 
   const addTrade = useCallback((data) => {
     setTradeData((prev) => {
-      const next = [...prev, data];
+      const next = [...prev, { ...data, _id: genId() }];
       next.sort((a, b) => a.tradeDate.localeCompare(b.tradeDate));
       return next;
     });
