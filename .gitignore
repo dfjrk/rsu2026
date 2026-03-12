@@ -3,3 +3,5 @@ dist/
 .env
 *.pdf
 .DS_Store
+*.xls
+*.xlsx
